@@ -1,0 +1,7 @@
+-- upgrade --
+CREATE TABLE IF NOT EXISTS `resource_beam` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(50) NOT NULL,
+    `type` SMALLINT NOT NULL  COMMENT 'ka: 1\nx: 2',
+    `created_at` DATETIME(6) NOT NULL  DEFAULT CURRENT_TIMESTAMP(6)
+) CHARACTER SET utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='波束';

@@ -1,0 +1,28 @@
+# python == 3.8.12 #################
+# base -----------------------------
+loguru
+arrow
+python-dotenv
+tomlkit
+
+# asyncio --------------------------
+# uvloop # Only Linux python >= 3.7
+
+# FastAPI --------------------------
+fastapi[all]
+uvicorn[standard]
+websockets
+anyio
+tortoise-orm[aiomysql]
+aiomysql
+python-rapidjson
+
+# Typer ----------------------------
+typer
+
+# DEV Depend #######################
+# Build ----------------------------
+# cx_Freeze
+
+# Database migration ---------------
+# aerich

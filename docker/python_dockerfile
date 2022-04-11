@@ -1,0 +1,17 @@
+FROM python:3.8-slim-buster
+ENV LANG C.UTF-8
+
+COPY . /MyProject
+WORKDIR /MyProject
+
+RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list \
+    && sed -i 's/security.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list \
+    && apt-get update \
+    && apt-get install -y vim
+
+#RUN pip install --no-cache-dir --upgrade pip setuptools -i https://mirrors.aliyun.com/pypi/simple/
+RUN pip install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/ \
+    && rm -rf ~/.cache
+
+
+CMD ["python","main.py"]

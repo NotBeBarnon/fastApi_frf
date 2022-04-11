@@ -1,0 +1,23 @@
+[tool]
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "1.2.3"
+version_files = [
+    "src/version.py:VERSION",
+]
+tag_format = "$version-sample"
+use_shortcuts = true
+update_changelog_on_bump = true
+annotated_tag = true
+
+[tool.aerich]
+tortoise_orm = "src.settings.DATABASE_CONFIG"
+location = "./migrations"
+src_folder = "./."
+
+[myproject]
+LOG_LEVEL = "debug"
+#DEV = true
+[myproject.database]
+minsize = 24
+maxsize = 26
