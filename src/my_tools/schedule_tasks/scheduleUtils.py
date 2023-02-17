@@ -6,8 +6,9 @@
 # import schedule_tasks
 from .. import schedule_tasks
 
-scheduler = schedule_tasks.scheduler
+# 1.使用BlockingScheduler
 
+scheduler = schedule_tasks.scheduler
 
 # 将被装饰的task注册为按照置顶时间间隔进行
 def times_every_secs(seconds):
@@ -31,3 +32,8 @@ def timed_on_time(hours, minute):
 @times_every_secs(seconds=7200)   # 两小时执行一次
 def demo():
     pass
+
+# 2.使用 AsyncIOScheduler
+
+async def func():
+    print("hello!")
