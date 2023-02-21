@@ -6,7 +6,9 @@
 from fastapi import FastAPI
 
 from .routers import all_router
-from ..settings import HTTP_BASE_URL
+from ..my_tools.object_manager_tools import global_om
+from ..my_tools.redis_tools.clients import RedisSentinelClient
+from ..settings import HTTP_BASE_URL, REDIS_CONFIG
 from ..version import VERSION
 
 __all__ = (
@@ -21,5 +23,15 @@ fast_app = FastAPI(
     docs_url=f"{HTTP_BASE_URL}/docs",
     redoc_url=f"{HTTP_BASE_URL}/redoc",
 )
+
+redis_client_ = RedisSentinelClient(
+    sentinels=REDIS_CONFIG["sentinels"]["service"],
+    service_name=REDIS_CONFIG["sentinels"]["service_name"],
+    db=REDIS_CONFIG["db"],
+    user=REDIS_CONFIG["user"],
+    password=REDIS_CONFIG["password"],
+    retry_interval=REDIS_CONFIG["retry_interval"],
+)
+global_om.register("redis_client", redis_client_)
 
 fast_app.include_router(all_router)

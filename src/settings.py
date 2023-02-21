@@ -4,6 +4,7 @@
 # @Description : 配置文件
 
 import io
+import json
 import os
 import sys
 from pathlib import Path
@@ -20,8 +21,15 @@ if PROJECT_DIR.name == "lib":  # 适配cx_Freeze打包项目后根目录的变�
 # 加载环境变量
 dotenv.load_dotenv(PROJECT_DIR.joinpath("project_env"))
 # 加载项目配置
-with io.open(PROJECT_DIR.joinpath("pyproject.toml"), "r", encoding='utf-8') as toml_file:
-    PROJECT_CONFIG = tomlkit.load(toml_file)["myproject"]
+__toml_config = json.loads(
+    json.dumps(
+        tomlkit.loads(PROJECT_DIR.joinpath("pyproject.toml").read_bytes())
+    )
+)  # 转换包装类型为Python默认类型
+VERSION = __toml_config["tool"]["commitizen"]["version"]
+VERSION_FORMAT = __toml_config["tool"]["commitizen"]["tag_format"].replace("$version", VERSION)
+PROJECT_CONFIG = __toml_config["myproject"]
+
 
 # DEBUG控制
 DEV = True if PROJECT_CONFIG.get("DEV", False) else False
@@ -35,6 +43,30 @@ PROD and logger.info("[PROD] Server")
 HTTP_API_LISTEN_HOST = PROJECT_CONFIG.get("HTTP_API_LISTEN_HOST", "0.0.0.0")
 HTTP_API_LISTEN_PORT = int(os.getenv("HTTP_API_LISTEN_PORT", 8080))
 HTTP_BASE_URL = PROJECT_CONFIG.get("HTTP_BASE_URL", "/api/sample")
+
+# 消息队列配置
+MQ_CONFIG = PROJECT_CONFIG["mq"]
+__kafka_service = os.getenv("FS_KAFKA_SERVICE")
+if __kafka_service:
+    MQ_CONFIG["bootstrap_servers"] = [item_.strip() for item_ in __kafka_service.split(",")]
+
+
+# redis 配置
+REDIS_CONFIG = PROJECT_CONFIG["redis"]
+__redis_service = os.getenv("FS_REDIS_SENTINEL_SERVICE")
+__redis_service = [(item_[0].strip(), int(item_[1])) for item_ in REDIS_CONFIG["sentinels"]["service"]] \
+    if __redis_service is None \
+    else [(item_[0].strip(), int(item_[1])) for item_ in (_.split(":") for _ in __redis_service.split(","))]
+REDIS_CONFIG.update(
+    {
+        "host": os.getenv("FS_REDIS_HOST", REDIS_CONFIG["host"]),
+        "port": int(os.getenv("FS_REDIS_PORT", REDIS_CONFIG["port"])),
+        "sentinels": {
+            "service": __redis_service,
+            "service_name": os.getenv("FS_REDIS_SENTINEL_SERVICE_NAME", REDIS_CONFIG["sentinels"]["service_name"]),
+        }
+    }
+)
 
 # 配置日志
 LOGGER_CONFIG = {

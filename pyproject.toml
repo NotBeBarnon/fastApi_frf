@@ -21,3 +21,37 @@ LOG_LEVEL = "debug"
 [myproject.database]
 minsize = 24
 maxsize = 26
+
+[myproject.redis]
+retry_interval = 10
+host = "124.223.5.168"
+port = 6379
+db = 0
+user = ""
+password = ""
+namespace = "FastSample"
+
+[myproject.redis.more_config] # aioredis的透传参数
+max_connections = 10  # 连接池数量
+socket_timeout = 1  # 连接超时时间
+
+[myproject.redis.sentinels]
+service = [["124.223.5.168", 6379], ]
+service_name = "mymaster"
+
+[myproject.mq]
+bootstrap_servers = ["localhost:9092"] # 控制mq的host，如果有环境变量，则此值不起作用
+user = ""
+password = ""
+retry_interval = 5 # mq重连间隔
+num_partitions = 1 # 主题的分区数
+replication_factor = 3 # 主题的备份数量
+# [myproject.mq.replica_assignments] 与num_partitions/replication_factor冲突，不要同时使用
+[myproject.mq.topic_configs] # 主题消息的透传参数
+"min.insync.replicas" = 2
+
+[myproject.mq.topics] # 程序需要用到的所有主题
+[myproject.mq.topics.consumer]
+fast_sample = "FAST_SAMPLE"
+[myproject.mq.topics.producer]
+fast_sample = "FAST_SAMPLE"

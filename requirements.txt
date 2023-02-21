@@ -1,21 +1,33 @@
-# python == 3.8.12 #################
+# python == 3.9.12 #################
 # base -----------------------------
 loguru
 arrow
 python-dotenv
 tomlkit
+aiohttp
+construct
+apscheduler
 
 # asyncio --------------------------
 # uvloop # Only Linux python >= 3.7
 
 # FastAPI --------------------------
-fastapi[all]
+fastapi
 uvicorn[standard]
 websockets
 anyio
 tortoise-orm[aiomysql]
 aiomysql
-python-rapidjson
+orjson == 3.6.5
+
+# dtm ------------------------------
+httpx
+
+# Cache ----------------------------
+aioredis == 2.0.1
+
+# MQ -------------------------------
+aiokafka
 
 # Typer ----------------------------
 typer
@@ -23,6 +35,8 @@ typer
 # DEV Depend #######################
 # Build ----------------------------
 # cx_Freeze
+# conda install -c conda-forge cx_freeze
 
 # Database migration ---------------
 # aerich
+# tortoise-cli

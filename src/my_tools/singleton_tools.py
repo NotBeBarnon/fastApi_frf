@@ -2,6 +2,7 @@
 # @Time    : 2022/12/7 9:17
 # @Author  : fzx
 # @Description : 单例工具
+import abc
 from typing import Any
 
 
@@ -23,3 +24,7 @@ class SingletonMeta(type):
         if cls not in cls.__instances:
             cls.__instances[cls] = super(SingletonMeta, cls).__call__(*args, **kwargs)
         return cls.__instances[cls]
+
+
+class SingletonABCMeta(abc.ABCMeta, SingletonMeta):
+    pass

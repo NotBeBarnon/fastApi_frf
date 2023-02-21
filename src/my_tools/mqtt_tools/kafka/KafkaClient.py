@@ -8,7 +8,7 @@
 # -*- coding: utf-8 -*-
 
 """
-kafka 消息队列
+kafka 消息队列 (单机使用）
 """
 from typing import Optional, List
 
